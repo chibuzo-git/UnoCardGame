@@ -16,7 +16,7 @@ public class UnoPlayerHandPanel extends JPanel {
         this.model = model;
         setLayout(new FlowLayout());
         cardLabels = new ArrayList<>();
-        this.setPreferredSize(new Dimension(400,700));
+        this.setPreferredSize(new Dimension(500,700));
     }
 
     public void updatePlayerHand(ArrayList<UnoCard> hand) {

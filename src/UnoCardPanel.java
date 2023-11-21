@@ -12,7 +12,7 @@ public class UnoCardPanel extends JPanel {
         setLayout(new BorderLayout());
         topCardLabel = new JLabel("",JLabel.CENTER);
         topCardLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.setPreferredSize(new Dimension(600,600));
+        this.setPreferredSize(new Dimension(500,600));
         this.add(topCardLabel, BorderLayout.CENTER);
 
     }
