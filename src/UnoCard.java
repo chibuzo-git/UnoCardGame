@@ -4,6 +4,8 @@
  * @version 1.0
  */
 public class UnoCard {
+
+
     enum Color{
         Red, Blue, Green, Yellow, Wild;
         private static final Color[] colors = Color.values();
@@ -18,7 +20,7 @@ public class UnoCard {
             return Value.values[i];
         }
     }
-    private final Color color;
+    private Color color;
     private final Value value;
 
     /**
@@ -46,12 +48,15 @@ public class UnoCard {
     public Value getValue(){
         return this.value;
     }
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
-//    /**
-//     * string representation of each card for identification
-//     * @return the card colour and value on string representation
-//     */
-//    public String toString(){
-//        return color.toString() + "_" + value.toString();
-//    }
+    /**
+     * string representation of each card for identification
+     * @return the card colour and value on string representation
+     */
+    public String toString(){
+        return color.toString() + "_" + value.toString();
+    }
 }

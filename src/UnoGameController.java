@@ -41,6 +41,10 @@ public class UnoGameController implements ActionListener {
             try {
                 UnoCard selectedCard = model.getPlayerCard(model.getCurrentPlayer(),selectedIndex);
                 System.out.println("Attempting to play card: " + selectedCard);
+//                if(selectedCard.getColor() == UnoCard.Color.Wild){
+//                    UnoCard.Color chosenColor = UnoCard.Color.Red;
+//                    model.setWildCardColor(chosenColor);
+//                }
                 model.submitPlayerCard(model.getCurrentPlayer(), selectedCard);
                 model.setSelectedCardIndex(-1);
             } catch (InvalidPlayerTurnException | InvalidColorSubmissionException | InvalidValueSubmissionException e) {

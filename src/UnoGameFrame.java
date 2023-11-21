@@ -138,9 +138,43 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
                 JOptionPane.showMessageDialog(this, winnerId + " has won the game!");
                 unoGameInfo.handleGameUpdate(e);
                 break;
+            case WILD_CARD_PLAYED:
+                // Prompt user to choose a color for the Wild card
+                UnoCard.Color chosenColor = showWildCardColorSelection();
+                model.setWildCardColor(chosenColor);
 
         }
 
+    }
+    private UnoCard.Color showWildCardColorSelection() {
+        // Array of colors to choose from
+        String[] colors = {"Red", "Green", "Blue", "Yellow"};
+        String selectedColor = (String) JOptionPane.showInputDialog(
+                this,
+                "Choose a color for the Wild card:",
+                "Select Color",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                colors,
+                colors[0]);
+
+        // Convert the selected string to an UnoCard.Color
+        return convertStringToColor(selectedColor);
+    }
+
+    private UnoCard.Color convertStringToColor(String colorString) {
+        switch (colorString) {
+            case "Red":
+                return UnoCard.Color.Red;
+            case "Green":
+                return UnoCard.Color.Green;
+            case "Blue":
+                return UnoCard.Color.Blue;
+            case "Yellow":
+                return UnoCard.Color.Yellow;
+            default:
+                return UnoCard.Color.Red; // Default color in case of null or unexpected input
+        }
     }
 
 

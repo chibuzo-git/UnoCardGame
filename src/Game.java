@@ -86,6 +86,9 @@ public class Game {
     public int getSelectedCardIndex(){
         return this.selectedCardIndex;
     }
+    public String getValidColor() {
+        return this.validColor.toString();
+    }
     public boolean gameOver() {
         for (String player : this.ids) {
             if (hasEmptyHand(player)) {
@@ -128,13 +131,19 @@ public class Game {
     public int getPlayerHandSize(String id) {
         return getPlayerHand(id).size();
     }
+    public void setWildCardColor(UnoCard.Color color) {
+        this.validColor = color;
+        if (!pile.isEmpty() && pile.get(0).getColor() == UnoCard.Color.Wild) {
+            pile.get(0).setColor(color);
+        }
+    }
 
     public boolean hasEmptyHand(String id) {
         return getPlayerHand(id).isEmpty();
     }
 
     public boolean validCardPlay(UnoCard card) {
-        return card.getValue() == validValue || card.getColor() == validColor;
+        return card.getValue() == validValue || card.getColor() == validColor ;
     }
     public boolean isValidColor(UnoCard.Color color){
         return color == UnoCard.Color.Red || color == UnoCard.Color.Green || color == UnoCard.Color.Blue ||
@@ -211,9 +220,22 @@ public class Game {
         checkPlayersTurn(id);
 
        try{
-           if (!validCardPlay(chosenCard)) {
+           if (!validCardPlay(chosenCard) && chosenCard.getColor() != UnoCard.Color.Wild) {
                throw new InvalidValueSubmissionException("Invalid card played, Try again!.");
-           }else {
+           }
+//           if (!validCardPlay(chosenCard)) {
+//               throw new InvalidValueSubmissionException("Invalid card played, Try again!.");
+//           }
+           if(chosenCard.getColor() == UnoCard.Color.Wild ){
+               updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.WILD_CARD_PLAYED, null));
+               ArrayList<UnoCard> playerHand = getPlayerHand(id);
+               playerHand.remove(chosenCard);
+               pile.add(0, chosenCard);
+               validValue = chosenCard.getValue();
+               changeTurn();
+               updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_PLAYED, getTopCard()));
+               System.out.println("here is the topcard now when wild is played:"+ getTopCard());
+               }else{
                // Handle special card effects
                switch (chosenCard.getValue()) {
                    case Skip:
@@ -239,19 +261,21 @@ public class Game {
                        updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.DIRECTION_CHANGED, direction));
                        System.out.println("reverse works");
                        break;
-                   case Wild:
-                       // Handle Wild card color change.
-                       if (!isValidColor(validColor)) {
-                           throw new InvalidColorSubmissionException("Invalid color chosen for Wild card.");
-                       }System.out.println("wild works");
-                       break;
+//                   case Wild:
+//                       // Trigger an event to handle Wild card color selection
+//                       updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.WILD_CARD_PLAYED, null));
+//                       break;
+
+
                }
                // Update game state
                ArrayList<UnoCard> playerHand = getPlayerHand(id);
                playerHand.remove(chosenCard);
                pile.add(0, chosenCard);
                validValue = chosenCard.getValue();
-               validColor = chosenCard.getColor();
+               if (chosenCard.getColor() != UnoCard.Color.Wild) {
+                   validColor = chosenCard.getColor();
+               }
 
                // Check for game end
                if (hasEmptyHand(id)) {
@@ -265,9 +289,9 @@ public class Game {
                    System.out.println("here is the topcard now:"+ topCard);
                    System.out.println("this is the new current player:" +getCurrentPlayer());
                    System.out.println("the players current hand now:"+ getPlayerHand(id));
-               }
+
            }System.out.println("Card submitted successfully.");
-       }catch(Exception e){
+       }}catch(Exception e){
        System.out.println("Exception in submitplayercard" + e.getMessage());}
     }
 

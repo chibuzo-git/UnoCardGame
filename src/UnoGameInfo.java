@@ -10,6 +10,7 @@ import java.awt.*;
 public class UnoGameInfo extends JPanel {
         private JLabel currentPlayerLabel;
         private JLabel gameDirectionLabel;
+        private JLabel validColor;
         private Game model;
 
         public UnoGameInfo(Game model) {
@@ -25,9 +26,11 @@ public class UnoGameInfo extends JPanel {
 
             currentPlayerLabel = new JLabel("Current Player: ");
             gameDirectionLabel = new JLabel("Direction: Clockwise");
+            validColor = new JLabel("Valid color now is: ");
 
             add(currentPlayerLabel);
             add(gameDirectionLabel);
+            add(validColor);
         }
 
         public void updateGameInfo() {
@@ -36,6 +39,9 @@ public class UnoGameInfo extends JPanel {
 
             String direction = model.getDirection() ? "Counter-Clockwise" : "Clockwise";
             gameDirectionLabel.setText("Direction: " + direction);
+
+            String vColor = "Valid color now is: " + model.getValidColor();
+            validColor.setText(vColor);
         }
 
         public void handleGameUpdate(UnoGameEvent e) {

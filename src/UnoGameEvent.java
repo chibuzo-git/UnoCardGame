@@ -11,7 +11,8 @@ public class UnoGameEvent extends EventObject {
         CARD_DRAWN,
         GAME_STARTED,
         GAME_ENDED,
-        DIRECTION_CHANGED
+        DIRECTION_CHANGED,
+        WILD_CARD_PLAYED
     }
 
     private final EventType eventType;
