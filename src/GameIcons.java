@@ -6,10 +6,14 @@ import java.net.URL;
  * @author chibuzo okpara
  */
 public class GameIcons {
+    public static boolean flipped = true;
+    public void flip(){
+        flipped = !flipped;
+    }
 
     public static ImageIcon loadCardImage(UnoCard card) throws FileNotFoundException {
         String cardName = getCardImageName(card);
-        String path = "/small/" + cardName + ".png";
+        String path = "/combined/" + cardName + ".png";
         URL imageUrl = GameIcons.class.getResource(path);
 
         if (imageUrl != null) {
@@ -20,9 +24,16 @@ public class GameIcons {
     }
 
     private static String getCardImageName(UnoCard card) {
-        String color = card.getColor().toString();
-        String value = card.getValue().toString();
-        return color + "_" + value;
+        if (flipped) {
+            String color = card.getColor().toString();
+            String value = card.getValue().toString();
+            return color + "_" + value;
+        } else if (!flipped) {
+            String darkColor = card.getDarkColor().toString();
+            String darkValue = card.getDarkValue().toString();
+            return darkColor + "_" + darkValue;
+        }
+        return "Wild_Flip";
     }
 
 }

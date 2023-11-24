@@ -12,6 +12,7 @@ public class UnoGameEvent extends EventObject {
         GAME_STARTED,
         GAME_ENDED,
         DIRECTION_CHANGED,
+        GAME_FLIPPED,
         WILD_CARD_PLAYED
     }
 

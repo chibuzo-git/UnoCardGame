@@ -11,6 +11,7 @@ public class UnoGameInfo extends JPanel {
         private JLabel currentPlayerLabel;
         private JLabel gameDirectionLabel;
         private JLabel validColor;
+        private JLabel validDarkColor;
         private Game model;
 
         public UnoGameInfo(Game model) {
@@ -27,10 +28,12 @@ public class UnoGameInfo extends JPanel {
             currentPlayerLabel = new JLabel("Current Player: ");
             gameDirectionLabel = new JLabel("Direction: Clockwise");
             validColor = new JLabel("Valid color now is: ");
+            validDarkColor = new JLabel("Valid dark color is: ");
 
             add(currentPlayerLabel);
             add(gameDirectionLabel);
             add(validColor);
+            add(validDarkColor);
         }
 
         public void updateGameInfo() {
@@ -42,6 +45,9 @@ public class UnoGameInfo extends JPanel {
 
             String vColor = "Valid color now is: " + model.getValidColor();
             validColor.setText(vColor);
+
+            String vdColor = "Valid dark color is: "+model.getValidDarkColor();
+            validDarkColor.setText(vdColor);
         }
 
         public void handleGameUpdate(UnoGameEvent e) {

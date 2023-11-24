@@ -141,8 +141,9 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
             case WILD_CARD_PLAYED:
                 // Prompt user to choose a color for the Wild card
                 UnoCard.Color chosenColor = showWildCardColorSelection();
+                UnoCard.DarkColor chosenDColor = showWildDarkCardColorSelection();
                 model.setWildCardColor(chosenColor);
-
+                model.setWildCardDarkColor(chosenDColor);
         }
 
     }
@@ -161,7 +162,21 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
         // Convert the selected string to an UnoCard.Color
         return convertStringToColor(selectedColor);
     }
+    private UnoCard.DarkColor showWildDarkCardColorSelection() {
+        // Array of colors to choose from
+        String[] colors = {"Pink", "Orange", "Teal", "Purple"};
+        String selectedColor = (String) JOptionPane.showInputDialog(
+                this,
+                "Choose a color for the Wild card:",
+                "Select Color",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                colors,
+                colors[0]);
 
+        // Convert the selected string to an UnoCard.Color
+        return convertStringsToColor(selectedColor);
+    }
     private UnoCard.Color convertStringToColor(String colorString) {
         switch (colorString) {
             case "Red":
@@ -176,6 +191,21 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
                 return UnoCard.Color.Red; // Default color in case of null or unexpected input
         }
     }
+    private UnoCard.DarkColor convertStringsToColor(String colorString) {
+        switch (colorString) {
+            case "Pink":
+                return UnoCard.DarkColor.Pink;
+            case "Orange":
+                return UnoCard.DarkColor.Orange;
+            case "Blue":
+                return UnoCard.DarkColor.Teal;
+            case "Yellow":
+                return UnoCard.DarkColor.Purple;
+            default:
+                return UnoCard.DarkColor.Pink; // Default color in case of null or unexpected input
+        }
+    }
+
 
 
     public static void main(String[] args) {

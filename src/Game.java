@@ -16,8 +16,11 @@ public class Game {
     private ArrayList<ArrayList<UnoCard> > playerHand;
     private UnoCard.Value validValue;
     private UnoCard.Color validColor;
+    private UnoCard.DarkValue validDarkValue;
+    private UnoCard.DarkColor validDarkColor;
     private int currentPlayer;
     private boolean direction;
+    private GameIcons flipped = new GameIcons();
     private List<UnoGameView> views;
 
     public Game(String[] playerIds) {
@@ -48,6 +51,9 @@ public class Game {
         UnoCard cards = deck.drawCard();
         validValue = cards.getValue();
         validColor = cards.getColor();
+        validDarkValue = cards.getDarkValue();
+        validDarkColor = cards.getDarkColor();
+
         if (cards.getValue() == UnoCard.Value.Wild) {
             start(game);
         }
@@ -89,6 +95,7 @@ public class Game {
     public String getValidColor() {
         return this.validColor.toString();
     }
+    public String getValidDarkColor(){return this.validDarkColor.toString();}
     public boolean gameOver() {
         for (String player : this.ids) {
             if (hasEmptyHand(player)) {
@@ -137,13 +144,19 @@ public class Game {
             pile.get(0).setColor(color);
         }
     }
+    public void setWildCardDarkColor(UnoCard.DarkColor color) {
+        this.validDarkColor = color;
+        if (!pile.isEmpty() && pile.get(0).getDarkColor() == UnoCard.DarkColor.Wild) {
+            pile.get(0).setDarkColor(color);
+        }
+    }
 
     public boolean hasEmptyHand(String id) {
         return getPlayerHand(id).isEmpty();
     }
 
     public boolean validCardPlay(UnoCard card) {
-        return card.getValue() == validValue || card.getColor() == validColor ;
+        return card.getValue() == validValue || card.getColor() == validColor || card.getDarkValue() == validDarkValue || card.getDarkColor() == validDarkColor;
     }
     public boolean isValidColor(UnoCard.Color color){
         return color == UnoCard.Color.Red || color == UnoCard.Color.Green || color == UnoCard.Color.Blue ||
@@ -223,19 +236,17 @@ public class Game {
            if (!validCardPlay(chosenCard) && chosenCard.getColor() != UnoCard.Color.Wild) {
                throw new InvalidValueSubmissionException("Invalid card played, Try again!.");
            }
-//           if (!validCardPlay(chosenCard)) {
-//               throw new InvalidValueSubmissionException("Invalid card played, Try again!.");
-//           }
-           if(chosenCard.getColor() == UnoCard.Color.Wild ){
+           if(chosenCard.getColor() == UnoCard.Color.Wild || chosenCard.getDarkColor() == UnoCard.DarkColor.Wild  ){
                updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.WILD_CARD_PLAYED, null));
                ArrayList<UnoCard> playerHand = getPlayerHand(id);
                playerHand.remove(chosenCard);
                pile.add(0, chosenCard);
                validValue = chosenCard.getValue();
+               validDarkValue = chosenCard.getDarkValue();
                changeTurn();
                updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_PLAYED, getTopCard()));
                System.out.println("here is the topcard now when wild is played:"+ getTopCard());
-               }else{
+           } else {
                // Handle special card effects
                switch (chosenCard.getValue()) {
                    case Skip:
@@ -261,19 +272,57 @@ public class Game {
                        updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.DIRECTION_CHANGED, direction));
                        System.out.println("reverse works");
                        break;
-//                   case Wild:
-//                       // Trigger an event to handle Wild card color selection
-//                       updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.WILD_CARD_PLAYED, null));
-//                       break;
-
-
+               }switch (chosenCard.getDarkValue()) {
+                   case Wild_Draw_Color:
+                       changeTurn();
+                       String nextPlayerId = getCurrentPlayer();
+                       UnoCard first = deck.drawCard();
+                       getPlayerHand(nextPlayerId).add(first);
+                       updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_DRAWN,
+                               Arrays.asList(first)));
+                       System.out.println("draw color works");
+                       break;
+                   case Reverse:
+                       direction = !direction;
+                       updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.DIRECTION_CHANGED, direction));
+                       System.out.println("reverse works");
+                       break;
+                   case Flip:
+                       flipped.flip();
+                       updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.GAME_FLIPPED, direction));
+                       System.out.println("flip works");
+                       break;
+                   case Draw_Five:
+                       changeTurn();
+                       String nextPlayerIds = getCurrentPlayer();
+                       UnoCard firsts = deck.drawCard();
+                       UnoCard second = deck.drawCard();
+                       UnoCard third = deck.drawCard();
+                       UnoCard fourth = deck.drawCard();
+                       UnoCard fifth = deck.drawCard();
+                       getPlayerHand(nextPlayerIds).add(firsts);
+                       getPlayerHand(nextPlayerIds).add(second);
+                       getPlayerHand(nextPlayerIds).add(third);
+                       getPlayerHand(nextPlayerIds).add(fourth);
+                       getPlayerHand(nextPlayerIds).add(fifth);
+                       updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_DRAWN,
+                               Arrays.asList(firsts, second, third, fourth, fifth)));
+                       System.out.println("drawfive works");
+                       break;
+                   case Skip_Everyone:
+                       for(int i =0; i< 3; i++){
+                           changeTurn(); // Skip once
+                       }
+                       System.out.println("skip everyone works");
+                       break;
                }
                // Update game state
                ArrayList<UnoCard> playerHand = getPlayerHand(id);
                playerHand.remove(chosenCard);
                pile.add(0, chosenCard);
                validValue = chosenCard.getValue();
-               if (chosenCard.getColor() != UnoCard.Color.Wild) {
+               //validColor = chosenCard.getColor();
+               if (chosenCard.getColor() != UnoCard.Color.Wild){
                    validColor = chosenCard.getColor();
                }
 
@@ -289,10 +338,9 @@ public class Game {
                    System.out.println("here is the topcard now:"+ topCard);
                    System.out.println("this is the new current player:" +getCurrentPlayer());
                    System.out.println("the players current hand now:"+ getPlayerHand(id));
-
-           }System.out.println("Card submitted successfully.");
-       }}catch(Exception e){
+               }System.out.println("Card submitted successfully.");
+           }
+       }catch(Exception e){
        System.out.println("Exception in submitplayercard" + e.getMessage());}
     }
-
 }

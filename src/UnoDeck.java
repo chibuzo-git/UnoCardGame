@@ -13,7 +13,7 @@ public class UnoDeck {
      * Constructor for Deck Class, creates a deck of 108 UnoCards with unassigned values.
      */
     public UnoDeck(){
-        cards = new UnoCard[108];
+        cards = new UnoCard[116];
     }
 
     /**
@@ -21,26 +21,38 @@ public class UnoDeck {
      */
     public void reset(){
         UnoCard.Color[] colors = UnoCard.Color.values();
+        UnoCard.DarkColor[] darkColors = UnoCard.DarkColor.values();
         cardsInDeck = 0;
         for (int i = 0; i< colors.length-1; i++) {
             UnoCard.Color color = colors[i];
+            UnoCard.DarkColor darkColor = darkColors[i];
             //making first 0 card
-            cards[cardsInDeck++] = new UnoCard(color, UnoCard.Value.getValue(0));
+            cards[cardsInDeck++] = new UnoCard(color, UnoCard.Value.getValue(0), darkColor, UnoCard.DarkValue.getDarkValue(0));
             //making the other cards
             for (int j = 1; j < 10; j++) {
-                cards[cardsInDeck++] = new UnoCard(color, UnoCard.Value.getValue(j));
-                cards[cardsInDeck++] = new UnoCard(color, UnoCard.Value.getValue(j));
+                cards[cardsInDeck++] = new UnoCard(color, UnoCard.Value.getValue(j), darkColor, UnoCard.DarkValue.getDarkValue(j));
+                cards[cardsInDeck++] = new UnoCard(color, UnoCard.Value.getValue(j), darkColor, UnoCard.DarkValue.getDarkValue(j));
             }
             UnoCard.Value[] values = new UnoCard.Value[]{UnoCard.Value.DrawTwo, UnoCard.Value.Skip, UnoCard.Value.Reverse};
             for (UnoCard.Value value : values) {
-                cards[cardsInDeck++] = new UnoCard(color, value);
-                cards[cardsInDeck++] = new UnoCard(color, value);
+                cards[cardsInDeck++] = new UnoCard(color, value, darkColor, UnoCard.DarkValue.Skip_Everyone);
+                cards[cardsInDeck++] = new UnoCard(color, value, darkColor, UnoCard.DarkValue.Draw_Five);
             }
         }
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Red, UnoCard.Value.Flip, UnoCard.DarkColor.Teal, UnoCard.DarkValue.Flip);
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Blue, UnoCard.Value.Flip, UnoCard.DarkColor.Purple, UnoCard.DarkValue.Flip);
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Green, UnoCard.Value.Flip, UnoCard.DarkColor.Pink, UnoCard.DarkValue.Flip);
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Yellow, UnoCard.Value.Flip, UnoCard.DarkColor.Orange, UnoCard.DarkValue.Flip);
+
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Red, UnoCard.Value.Flip, UnoCard.DarkColor.Teal, UnoCard.DarkValue.Flip);
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Blue, UnoCard.Value.Flip, UnoCard.DarkColor.Purple, UnoCard.DarkValue.Flip);
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Green, UnoCard.Value.Flip, UnoCard.DarkColor.Pink, UnoCard.DarkValue.Flip);
+        cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Yellow, UnoCard.Value.Flip, UnoCard.DarkColor.Orange, UnoCard.DarkValue.Flip);
+
         UnoCard.Value[] values = new UnoCard.Value[]{UnoCard.Value.Wild, UnoCard.Value.Wild_four};
         for (UnoCard.Value value: values){
             for (int i = 0; i<4; i++){
-                cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Wild, value);
+                cards[cardsInDeck++] = new UnoCard(UnoCard.Color.Wild, value, UnoCard.DarkColor.Wild, UnoCard.DarkValue.Wild_Draw_Color);
             }
         }
     }
@@ -117,6 +129,10 @@ public class UnoDeck {
             ret[i] = cards[--cardsInDeck];
         }
         return ret;
+    }
+     public static void main(String[] args) {
+        UnoDeck deck  = new UnoDeck();
+        deck.reset();
     }
 }
 
