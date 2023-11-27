@@ -31,7 +31,10 @@ To run the project, click run in the UnoGameFrame.
 Available Commands: 
 "-1" - to draw a card from the deck
 
-Test Instructions: run the test files
+Test Files(Duabo Dagogo Longjohn):
+
+Test Instructions: 
+run the test files
 
 To test individual methods open up Tests.java and run each method individually with junit tests.
 
