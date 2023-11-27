@@ -20,6 +20,7 @@ AiPlayer: Plays the Uno game automatically as a player
 AI Player Implementation:
 An AI player class was created to evaluate the topcard of the pile, store every card that matches and play any random card from the list of accepted cards in hand.
 An AI object is now added to the game class so as to follow the game state and act accordingly. The change turn method in the game continually checks for the AI's turn, to allow it play.
+When the gui is started, include a player's name as,"AI," to include ai capabilities.
 
 Set-up Instructions:
 Download the zip file. Open IntelliJ IDE and setup a workspace. To open the zip file inside IntelliJ, from the main menu, click file then select import. Go to General > Existing Projects into Workspace > Next. Click the Select Archive File and browse for the zip file that was downloaded in the previous steps. The new project should now be visible in the Package Explorer. All the files mentioned above should be in that project. Run the main method inside the UnoGameFrame class to play the game.
