@@ -382,6 +382,7 @@ public class Game {
             UnoCard lastDrawnCard = aiPlayer.getHand().get(aiPlayer.getHand().size() - 1);
             //updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_DRAWN, lastDrawnCard));
             System.out.println("AI has drawn a card.");
+            changeTurn();
         }
     }
 
