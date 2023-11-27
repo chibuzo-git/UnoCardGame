@@ -18,6 +18,13 @@ UnoPlayerHandPanel: Updates player hand as card is played or drawn
 AiPlayer: Plays the Uno game automatically as a player
 
 UnoFlip Implementation(Emmanuel Adekoya):
+In the UnoCard class the colour and value parameters are accompanied by a darkColor and darkValue parameter. 
+These are then initialized in the UnoDeck class. 
+The Game icons Class includes a method to understand when a flip card is played. 
+Switching the flipped parameter changes the naming used in developing the icon of each card. 
+The flip method is initialized in the Game method. and all other action cards not created in the light side Uno are implimented. 
+The wild card method is also implimented in the UnoGameFrame. Also checks for what side of the game it is currently.
+All other classes in the game are made to accomodate the updated game.
 
 AI Player Implementation(Chibuzo Okpara):
 An AI player class was created to evaluate the topcard of the pile, store every card that matches and play any random card from the list of accepted cards in hand.
