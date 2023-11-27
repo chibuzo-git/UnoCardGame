@@ -36,6 +36,6 @@ Test Instructions: run the test files
 To test individual methods open up Tests.java and run each method individually with junit tests.
 
 Known Issues:
-When the AI plays certain cards from its hand , it causes a recursive callbut this issue has not been looked into properly.
+When the AI plays a certain card from its hand , it causes a recursive call issue but the specifics of this issue has not been discovered.
 
 REFERENCE: the original implementation of the models for this game was sourced from here: https://www.youtube.com/@codeclique1416
