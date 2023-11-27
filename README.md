@@ -17,7 +17,9 @@ UnoGameview: Interface to handle updating game view
 UnoPlayerHandPanel: Updates player hand as card is played or drawn
 AiPlayer: Plays the Uno game automatically as a player
 
-AI Player Implementation:
+UnoFlip Implementation(Emmanuel Adekoya):
+
+AI Player Implementation(Chibuzo Okpara):
 An AI player class was created to evaluate the topcard of the pile, store every card that matches and play any random card from the list of accepted cards in hand.
 An AI object is now added to the game class so as to follow the game state and act accordingly. The change turn method in the game continually checks for the AI's turn, to allow it play.
 When the gui is started, include a player's name as,"AI," to include ai capabilities.
@@ -33,6 +35,7 @@ Test Instructions: run the test files
 
 To test individual methods open up Tests.java and run each method individually with junit tests.
 
-Known Issues: When a player draws one from deck, the game does not advance to the next player till the current player plays
+Known Issues:
+When the AI plays certain cards from its hand , it causes a recursive callbut this issue has not been looked into properly.
 
 REFERENCE: the original implementation of the models for this game was sourced from here: https://www.youtube.com/@codeclique1416
