@@ -69,6 +69,38 @@ public class UnoCard {
         this.darkColor = darkColor;
     }
 
+    public int getScore() {
+        int lightScore = getLightScore();
+        int darkScore = getDarkScore();
+        return Math.max(lightScore, darkScore); // Use the higher of the two scores
+    }
+
+    private int getLightScore() {
+        switch (this.value) {
+            case Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine:
+                return this.value.ordinal(); // ordinal gives the position in enum (0 for Zero, 1 for One, etc.)
+            case DrawTwo, Skip, Reverse, Flip:
+                return 20;
+            case Wild, Wild_four:
+                return 50;
+            default:
+                return 0;
+        }
+    }
+
+    private int getDarkScore() {
+        switch (this.darkValue) {
+            case Six, Three, Two, Eight, Five, Four, Nine, One, Seven, Flip:
+                return 20;
+            case Skip_Everyone, Wild_Draw_Color:
+                return 50;
+            case Draw_Five:
+                return 40;
+            default:
+                return 0;
+        }
+    }
+
 //    /**
 //     * string representation of each card for identification
 //     * @return the card colour and value on string representation

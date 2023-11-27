@@ -22,6 +22,7 @@ public class Game {
     private boolean direction;
     private GameIcons flipped = new GameIcons();
     private List<UnoGameView> views;
+    private AiPlayer aiPlayer;
 
     public Game(String[] playerIds) {
         int i;
@@ -39,6 +40,8 @@ public class Game {
             playerHand.add(newHands);
         }
         this.views = new ArrayList<UnoGameView>();
+        aiPlayer =new AiPlayer(this);
+
     }
 
     public void addView(UnoGameView view){
@@ -156,7 +159,8 @@ public class Game {
     }
 
     public boolean validCardPlay(UnoCard card) {
-        return card.getValue() == validValue || card.getColor() == validColor || card.getDarkValue() == validDarkValue || card.getDarkColor() == validDarkColor;
+        return card.getValue() == validValue || card.getColor() == validColor ||
+                card.getDarkValue() == validDarkValue || card.getDarkColor() == validDarkColor;
     }
     public boolean isValidColor(UnoCard.Color color){
         return color == UnoCard.Color.Red || color == UnoCard.Color.Green || color == UnoCard.Color.Blue ||
@@ -195,7 +199,8 @@ public class Game {
         System.out.println("The game has been won!");
         System.exit(0);
     }
-    public void changeTurn() {
+    public void changeTurn() throws InvalidColorSubmissionException, InvalidValueSubmissionException,
+            InvalidPlayerTurnException {
         if (!direction) {
             // Move to the next player in a clockwise direction
             currentPlayer = (currentPlayer + 1) % ids.length;
@@ -203,6 +208,7 @@ public class Game {
             // Move to the next player in a counter-clockwise direction
             currentPlayer = (currentPlayer - 1 + ids.length) % ids.length;
         }
+        checkAiTurn();
 
         // Notify the views about the turn change
         updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.TURN_CHANGED, getCurrentPlayer()));
@@ -223,6 +229,23 @@ public class Game {
         for(UnoGameView v : views){
             v.handleGameUpdate(e);
         }
+    }
+
+    /**
+     * Method to map players hand to score when the game ends
+     * @return scores
+     */
+
+    public Map<String, Integer> calculateScores() {
+        Map<String, Integer> scores = new HashMap<>();
+        for (int i = 0; i < ids.length; i++) {
+            int score = 0;
+            for (UnoCard card : playerHand.get(i)) {
+                score += card.getScore();
+            }
+            scores.put(ids[i], score);
+        }
+        return scores;
     }
 
     public void submitPlayerCard(String id, UnoCard chosenCard) throws InvalidPlayerTurnException,
@@ -311,7 +334,7 @@ public class Game {
                        break;
                    case Skip_Everyone:
                        for(int i =0; i< 3; i++){
-                           changeTurn(); // Skip once
+                           changeTurn(); // Skip once, three times
                        }
                        System.out.println("skip everyone works");
                        break;
@@ -328,6 +351,7 @@ public class Game {
 
                // Check for game end
                if (hasEmptyHand(id)) {
+                   calculateScores();
                    updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.GAME_ENDED, id));
                    endGame();
                    return;
@@ -342,5 +366,34 @@ public class Game {
            }
        }catch(Exception e){
        System.out.println("Exception in submitplayercard" + e.getMessage());}
+    }
+
+    public boolean isLightSideActive() {
+        return flipped.isLightSideActive();
+    }
+
+    public void aiPlayerTurn() throws InvalidColorSubmissionException, InvalidValueSubmissionException, InvalidPlayerTurnException {
+        UnoCard playedCard = aiPlayer.makeMove();
+
+        if (playedCard != null) {
+            submitPlayerCard(aiPlayer.getPlayerId(), playedCard);
+            //updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_PLAYED, playedCard));
+        } else {
+            UnoCard lastDrawnCard = aiPlayer.getHand().get(aiPlayer.getHand().size() - 1);
+            //updateViews(new UnoGameEvent(this, UnoGameEvent.EventType.CARD_DRAWN, lastDrawnCard));
+            System.out.println("AI has drawn a card.");
+        }
+    }
+
+    // Helper method to get AI player index
+    private int aiPlayerIndex() {
+        return ids.length - 1; // Assuming AI is the last player
+    }
+
+    // Method to check if it's AI's turn
+    public void checkAiTurn() throws InvalidColorSubmissionException, InvalidValueSubmissionException, InvalidPlayerTurnException {
+        if (ids[currentPlayer].equals(aiPlayer.getPlayerId())) {
+            aiPlayerTurn();
+        }
     }
 }

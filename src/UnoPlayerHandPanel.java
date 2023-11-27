@@ -22,10 +22,11 @@ public class UnoPlayerHandPanel extends JPanel {
     public void updatePlayerHand(ArrayList<UnoCard> hand) {
         removeAll(); // Remove all existing card labels
         cardLabels.clear(); // Clear the list of card labels
-
+        System.out.println("updating hand:"+hand);
         for (UnoCard card : hand) {
+
             try {
-                System.out.println("updating hand:"+hand);
+
                 ImageIcon cardImage = GameIcons.loadCardImage(card); // Load the image for the card
                 JLabel cardLabel = new JLabel(cardImage); // Create a label with the card image
                 cardLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Set border for the label

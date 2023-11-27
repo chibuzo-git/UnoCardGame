@@ -36,4 +36,8 @@ public class GameIcons {
         return "Wild_Flip";
     }
 
+    public boolean isLightSideActive(){
+        return flipped;
+    }
+
 }

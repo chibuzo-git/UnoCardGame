@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * this class is the frame for the UnoGame and all the components are initialized here
@@ -135,6 +136,7 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
             case GAME_ENDED:
                 // Handle game end scenario, maybe show a dialog with the winner
                 String winnerId = (String) e.getEventData();
+                showScores();
                 JOptionPane.showMessageDialog(this, winnerId + " has won the game!");
                 unoGameInfo.handleGameUpdate(e);
                 break;
@@ -144,6 +146,12 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
                 UnoCard.DarkColor chosenDColor = showWildDarkCardColorSelection();
                 model.setWildCardColor(chosenColor);
                 model.setWildCardDarkColor(chosenDColor);
+        }
+        // After handling the event, check if it's AI's turn
+        try {
+            model.checkAiTurn();
+        } catch (InvalidPlayerTurnException | InvalidColorSubmissionException | InvalidValueSubmissionException ex) {
+            ex.printStackTrace();
         }
 
     }
@@ -205,6 +213,19 @@ public class UnoGameFrame extends JFrame implements UnoGameView {
                 return UnoCard.DarkColor.Pink; // Default color in case of null or unexpected input
         }
     }
+
+    public void showScores() {
+        Map<String, Integer> scores = model.calculateScores();
+        StringBuilder scoreMessage = new StringBuilder("Game Over! Final Scores:\n");
+
+        for (Map.Entry<String, Integer> entry : scores.entrySet()) {
+            scoreMessage.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+        }
+
+        JOptionPane.showMessageDialog(null, scoreMessage.toString(), "Scores",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
 
 
 
