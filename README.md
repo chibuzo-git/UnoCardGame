@@ -38,7 +38,7 @@ To run the project, click run in the UnoGameFrame.
 Available Commands: 
 "-1" - to draw a card from the deck
 
-Test Files(Duabo Dagogo Longjohn):
+Test Files(Duabo Dagogo Longjohn): Test methods in the UnoCardTest class check if the methods to get colors and values for both the light and dark side return the correct colors and values. Test Methods in the UnoDeckTest class test the methods for drawing single or multiple cards from the deck and the shuffle method. Test Methods in the GameTest class test the methods that facilitate the playing of the game. Test methods in the AIPlayerTest class check if the AI performs as intended.
 
 Test Instructions: 
 run the test files
